@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('teacher_id');
             $table->string('firstname');
             $table->string('lastname');
+            $table->string('gender');
             $table->string('student_identication');
             $table->unsignedBigInteger('class_id'); // To store class ID
             $table->string('class_name'); // To store class name

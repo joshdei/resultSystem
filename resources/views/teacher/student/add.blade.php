@@ -41,6 +41,8 @@
                             <input name="student_firstname" id="student_firstname" placeholder="Student First Name" required type="text" class="form-control">
                         </div>
                     </div>
+
+                    
                 
                     <!-- Last Name Input -->
                     <div class="row mb-3">
@@ -50,9 +52,16 @@
                         </div>
                     </div>
                 
-                
-                
-                
+                    <div class="row mb-3">
+                      <label for="student_lastname" class="col-sm-2 col-form-label">Gender</label>
+                      <div class="col-sm-10">
+                        <select name="gender" class="form-select" id="floatingSelect" aria-label="Sex">
+                          <option selected>Gender</option>
+                          <option value="male">MALE</option>
+                          <option value="female">FEMALE</option>
+                      </select>
+                      </div>
+                  </div>
                 
                     <!-- Passport Image Input -->
                     <div class="row mb-3">

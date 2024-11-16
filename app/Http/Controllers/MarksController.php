@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models;
+use App\Models\AssignSession;
+use App\Models\AssignClassTeacher;
+use App\Models\AssignHeadClassTeacher;
+use App\Models\AssignResumption;
+use App\Models\Classes;
 use App\Models\Subject;
 use App\Models\Mark;
 use App\Models\Student;
@@ -63,25 +68,23 @@ public function viewOthers(){
  
 public function addMarks()
 {
-    // Get the authenticated user's ID
     $userId = Auth::user()->id;
-
-    // Get the owner_id associated with the teacher (ensure the 'HeadTeacherClass' model exists and is correctly defined)
     $teacherOwnerId = HeadTeacherClass::where('teacher_id', $userId)->first(); 
- 
-    // Check if the teacher has an associated owner_id
+
     if (!$teacherOwnerId) {
         return redirect()->back()->with('error', 'No owner ID found for this teacher.');
     }
 
-    // Fetch the marks based on the owner_id (it should match with the teacher's associated students)
+    $getSession = AssignSession::where('owner_id', $teacherOwnerId->owner_id)->get();
+    $getAssignteacher = AssignClassTeacher::where('class_id', $teacherOwnerId->teacher_class_id)->get();
+    $getHeadteacher = AssignHeadClassTeacher::where('class_id', $teacherOwnerId->teacher_class_id)->get();
+    $getResumption = AssignResumption::where('owner_id', $teacherOwnerId->owner_id)->get();
+    $getClass = Classes::where('id', $teacherOwnerId->teacher_class_id)->get();
     $marks = Mark::where('owner_id', $teacherOwnerId->owner_id)->get();
-    $getSubjectoftheclass = Subject::where('subject_class_id',$teacherOwnerId->teacher_class_id)->get();
-    // Fetch the students associated with this teacher
+    $getSubjectOfTheClass = Subject::where('subject_class_id', $teacherOwnerId->teacher_class_id)->get();
     $students = Student::where('teacher_id', $userId)->get();
 
-    // Pass the data to the view
-    return view('teacher.mark.add', compact('marks', 'students','getSubjectoftheclass'));
+    return view('teacher.mark.add', compact('marks', 'students', 'getSubjectOfTheClass', 'getSession', 'getAssignteacher', 'getHeadteacher', 'getResumption', 'getClass'));
 }
 
 public function uploadStudentMarks(Request $request)

@@ -91,6 +91,8 @@ class StudentController extends Controller
         'student_lastname' => 'required|string|max:255',
         'student_identication' => 'required|string|max:255',
         'student_class_details' => 'required|string',
+        'gender' => 'required|string',
+        
         'student_image' => 'required|image|max:2048',
         
     ]);
@@ -115,6 +117,7 @@ class StudentController extends Controller
     $student->class_name = $className; // Save the class name
     $student->class_arm = $classArm; // Save the class arm
     $student->teacher_id = Auth::user()->id; // Save the class arm
+    $student->gender = $validatedData['gender'];
     $student->student_identication = $validatedData['student_identication'];
     // Handle file upload
     if ($request->hasFile('student_image')) {
@@ -193,6 +196,7 @@ public function updateStudent(Request $request, $id)
         'student_lastname' => 'required|string|max:255',
         'student_class_details' => 'required|string',
         'student_image' => 'nullable|image|max:2048',
+        'gender' => 'required|string', // Fixed validation for gender
     ]);
 
     // Find the student by ID
@@ -211,6 +215,7 @@ public function updateStudent(Request $request, $id)
     // Update student details
     $student->firstname = $validatedData['student_firstname'];
     $student->lastname = $validatedData['student_lastname'];
+    $student->gender = $validatedData['gender'];
 
     // Handle the image file upload if a new image is provided
     if ($request->hasFile('student_image')) {
@@ -224,8 +229,7 @@ public function updateStudent(Request $request, $id)
         $path = $image->store('students', 'public');
         $student->profile_image = $path;
     }
-
-    // Save the updated student record
+    
     $student->save();
 
     // Redirect back with success message

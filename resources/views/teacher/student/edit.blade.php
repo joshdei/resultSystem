@@ -25,22 +25,20 @@
                         <form method="POST" enctype="multipart/form-data" action="{{ route('updateStudent', $student->id) }}">
                             @csrf
                             @method('PUT')
-
-                            <!-- First Name Input -->
-
+                        
+                            <!-- Current Image -->
                             <div class="row mb-3">
                                 <label for="student_image" class="col-sm-2 col-form-label">Current Image: </label>
                                 <div class="col-sm-10">
-                                   
                                     @if($student->profile_image)
                                         <small>
                                             <img class="rounded-circle" src="{{ asset('storage/' . ($student->profile_image ?? 'default-profile-image.jpg')) }}" alt="Profile Image" style="width: 100px; height: 100px;">
-                                            </small>
-
+                                        </small>
                                     @endif
                                 </div>
                             </div>
-
+                        
+                            <!-- First Name Input -->
                             <div class="row mb-3">
                                 <label for="student_firstname" class="col-sm-2 col-form-label">First Name</label>
                                 <div class="col-sm-10">
@@ -50,7 +48,7 @@
                                            required type="text" class="form-control">
                                 </div>
                             </div>
-
+                        
                             <!-- Last Name Input -->
                             <div class="row mb-3">
                                 <label for="student_lastname" class="col-sm-2 col-form-label">Last Name</label>
@@ -61,18 +59,27 @@
                                            required type="text" class="form-control">
                                 </div>
                             </div>
-
-                           
-                           
+                        
+                            <!-- Gender Selection -->
+                            <div class="row mb-3">
+                                <label for="gender" class="col-sm-2 col-form-label">Gender</label>
+                                <div class="col-sm-10">
+                                    <select name="gender" class="form-select" id="floatingSelect" aria-label="Gender" required>
+                                        <option selected disabled>Gender</option>
+                                        <option value="male" {{ $student->gender == 'male' ? 'selected' : '' }}>MALE</option>
+                                        <option value="female" {{ $student->gender == 'female' ? 'selected' : '' }}>FEMALE</option>
+                                    </select>
+                                </div>
+                            </div>
+                        
                             <!-- Passport Image Input -->
                             <div class="row mb-3">
                                 <label for="student_image" class="col-sm-2 col-form-label">Passport Image</label>
                                 <div class="col-sm-10">
                                     <input name="student_image" id="student_image" class="form-control" type="file">
-                                    
                                 </div>
                             </div>
-
+                        
                             <!-- Select Class Dropdown -->
                             <div class="row mb-3">
                                 <label for="student_class_details" class="col-sm-2 col-form-label">Select Class</label>
@@ -88,7 +95,7 @@
                                     </select>
                                 </div>
                             </div>
-
+                        
                             <!-- Submit Button -->
                             <div class="row mb-3">
                                 <div class="col-sm-10 offset-sm-2">
@@ -96,7 +103,7 @@
                                 </div>
                             </div>
                         </form>
-
+                        
                     </div>
                 </div>
 

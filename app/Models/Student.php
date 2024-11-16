@@ -10,6 +10,7 @@ class Student extends Model
         'teacher_id',
         'firstname',
         'lastname',
+        'gender',
         'student_identication',
         'class_id',
         'class_name',

@@ -25,6 +25,7 @@
                     <th scope="col">Image</th>
                     <th scope="col">First Name</th>
                     <th scope="col">Last Name</th>
+                    <th scope="col">Gender</th>
                     <th scope="col">Class</th>
                     <th scope="col">Arm</th>
                     <th scope="col">Action</th>
@@ -43,6 +44,7 @@
                   </td>
                     <td>{{ $student->firstname }}</td>
                     <td>{{ $student->lastname }}</td>
+                    <td>{{ $student->gender }}</td>
                     <td>{{ $student->class_name }}</td>
                     <td>{{ $student->class_arm }}</td>
                    
