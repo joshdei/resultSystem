@@ -28,6 +28,14 @@
                 
                     <!-- First Name Input -->
                     <div class="row mb-3">
+                        <label for="student_identication" class="col-sm-2 col-form-label">Student ID</label>
+                        <div class="col-sm-10">
+                            <input name="student_identication" id="student_identication" placeholder="Student ID Number" required type="text" class="form-control">
+                        </div>
+                    </div>
+
+                      <!-- First Name Input -->
+                      <div class="row mb-3">
                         <label for="student_firstname" class="col-sm-2 col-form-label">First Name</label>
                         <div class="col-sm-10">
                             <input name="student_firstname" id="student_firstname" placeholder="Student First Name" required type="text" class="form-control">

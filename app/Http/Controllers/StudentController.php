@@ -89,8 +89,10 @@ class StudentController extends Controller
     $validatedData = $request->validate([
         'student_firstname' => 'required|string|max:255',
         'student_lastname' => 'required|string|max:255',
+        'student_identication' => 'required|string|max:255',
         'student_class_details' => 'required|string',
         'student_image' => 'required|image|max:2048',
+        
     ]);
 
     // Extract class details
@@ -113,7 +115,7 @@ class StudentController extends Controller
     $student->class_name = $className; // Save the class name
     $student->class_arm = $classArm; // Save the class arm
     $student->teacher_id = Auth::user()->id; // Save the class arm
-
+    $student->student_identication = $validatedData['student_identication'];
     // Handle file upload
     if ($request->hasFile('student_image')) {
         $image = $request->file('student_image');
