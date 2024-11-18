@@ -22,6 +22,7 @@
                 <thead>
                   <tr>
                     <th scope="col">#</th>
+                    <th scope="col">UID</th>
                     <th scope="col">Image</th>
                     <th scope="col">First Name</th>
                     <th scope="col">Last Name</th>
@@ -35,6 +36,7 @@
                 @forelse ($students as $student)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
+                    <td>{{ $student->student_identication }}</td>
                     <td>
                       @if ($student->profile_image)
                           <img src="{{ asset('storage/' . $student->profile_image) }}" alt="Profile" width="50" height="50">
@@ -50,6 +52,8 @@
                    
                     <td>
                         <a href="{{ route('editStudent', $student->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{{ route('addStudentmarks', $student->id) }}" class="btn btn-warning btn-sm">Add Marks</a>
+                        <a href="{{ route('singleStudentResult', $student->id) }}" class="btn btn-warning btn-sm">Result</a>
                         <form action="{{ route('deleteStudent', $student->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')

@@ -45,16 +45,25 @@
             </li>
             <li>
               <a href="{{route('assign_resumption_date')}}">
-                  <i class="bi bi-circle"></i><span>Add RESUMPTION Data</span>
+                  <i class="bi bi-circle"></i><span>Resumption Data</span>
               </a>
           </li>
 
           <li>
             <a href="{{route('assign_session')}}">
-                <i class="bi bi-circle"></i><span>Add SESSION</span>
+                <i class="bi bi-circle"></i><span>Add Session</span>
             </a>
         </li>
-
+        <li>
+          <a href="{{route('assign_term')}}">
+              <i class="bi bi-circle"></i><span>View Term</span>
+          </a>
+      </li>
+      <li>
+        <a href="{{route('opening_of_school_date')}}">
+            <i class="bi bi-circle"></i><span>View School Date</span>
+        </a>
+    </li>
           
         </ul>
     </li><!-- End Components Nav -->

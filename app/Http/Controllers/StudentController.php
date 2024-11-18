@@ -7,6 +7,7 @@ use App\Models;
 use App\Models\HeadTeacherClass;
 use App\Models\Classes;
 use App\Models\Student;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 class StudentController extends Controller
@@ -84,52 +85,7 @@ class StudentController extends Controller
     }
 
 
-    public function uploadStudent(Request $request)
-{
-    $validatedData = $request->validate([
-        'student_firstname' => 'required|string|max:255',
-        'student_lastname' => 'required|string|max:255',
-        'student_identication' => 'required|string|max:255',
-        'student_class_details' => 'required|string',
-        'gender' => 'required|string',
-        
-        'student_image' => 'required|image|max:2048',
-        
-    ]);
 
-    // Extract class details
-    $classDetails = explode(',', $request->input('student_class_details'));
-
-    // Ensure all parts are present
-    if (count($classDetails) === 3) {
-        $classId = $classDetails[0];
-        $className = $classDetails[1];
-        $classArm = $classDetails[2];
-    } else {
-        return back()->withErrors(['student_class_details' => 'Invalid class selection.']);
-    }
-
-    // Save student details to the database
-    $student = new Student();
-    $student->firstname = $validatedData['student_firstname'];
-    $student->lastname = $validatedData['student_lastname'];
-    $student->class_id = $classId; // Save the class ID
-    $student->class_name = $className; // Save the class name
-    $student->class_arm = $classArm; // Save the class arm
-    $student->teacher_id = Auth::user()->id; // Save the class arm
-    $student->gender = $validatedData['gender'];
-    $student->student_identication = $validatedData['student_identication'];
-    // Handle file upload
-    if ($request->hasFile('student_image')) {
-        $image = $request->file('student_image');
-        $path = $image->store('students', 'public');
-        $student->profile_image = $path;
-    }
-
-    $student->save();
-
-    return redirect()->route('viewStudent')->with('success', 'Student successfully added!');
-}
 
 public function editStudent($id)
 {
@@ -188,53 +144,108 @@ public function deleteStudent($id)
     return redirect()->route('viewStudent')->with('success', 'Student deleted successfully.');
 }
 
-public function updateStudent(Request $request, $id)
-{
-    // Validate the incoming request data
-    $validatedData = $request->validate([
-        'student_firstname' => 'required|string|max:255',
-        'student_lastname' => 'required|string|max:255',
-        'student_class_details' => 'required|string',
-        'student_image' => 'nullable|image|max:2048',
-        'gender' => 'required|string', // Fixed validation for gender
-    ]);
 
-    // Find the student by ID
-    $student = Student::findOrFail($id);
 
-    // Extract class details
-    $classDetails = explode(',', $request->input('student_class_details'));
-    if (count($classDetails) === 3) {
-        $student->class_id = $classDetails[0];
-        $student->class_name = $classDetails[1];
-        $student->class_arm = $classDetails[2];
-    } else {
-        return back()->withErrors(['student_class_details' => 'Invalid class selection.']);
-    }
+    // Upload student
+    public function uploadStudent(Request $request)
+    {
+        $validatedData = $request->validate([
+            'student_firstname' => 'required|string|max:255',
+            'student_lastname' => 'required|string|max:255',
+            'student_identication' => 'required|string|max:255',
+            'student_class_details' => 'required|string',
+            'gender' => 'required|string',
+            'student_image' => 'required|image|max:2048',
+        ]);
 
-    // Update student details
-    $student->firstname = $validatedData['student_firstname'];
-    $student->lastname = $validatedData['student_lastname'];
-    $student->gender = $validatedData['gender'];
+        // Extract class details
+        $classDetails = explode(',', $request->input('student_class_details'));
 
-    // Handle the image file upload if a new image is provided
-    if ($request->hasFile('student_image')) {
-        // Delete the old image if it exists
-        if ($student->profile_image && \Storage::disk('public')->exists($student->profile_image)) {
-            \Storage::disk('public')->delete($student->profile_image);
+        if (count($classDetails) === 3) {
+            $classId = $classDetails[0];
+            $className = $classDetails[1];
+            $classArm = $classDetails[2];
+        } else {
+            return back()->withErrors(['student_class_details' => 'Invalid class selection.']);
         }
 
-        // Save the new image
-        $image = $request->file('student_image');
-        $path = $image->store('students', 'public');
-        $student->profile_image = $path;
-    }
-    
-    $student->save();
+        // Save student details to the database
+        $student = new Student();
+        $student->firstname = $validatedData['student_firstname'];
+        $student->lastname = $validatedData['student_lastname'];
+        $student->class_id = $classId;
+        $student->class_name = $className;
+        $student->class_arm = $classArm;
+        $student->teacher_id = Auth::user()->id;
+        $student->gender = $validatedData['gender'];
+        $student->student_identication = $validatedData['student_identication'];
 
-    // Redirect back with success message
-    return redirect()->route('viewStudent')->with('success', 'Student details updated successfully.');
-}
+        // Handle file upload
+        if ($request->hasFile('student_image')) {
+            $folderPath = storage_path('app/public/student_image');
+            if (!File::exists($folderPath)) {
+                File::makeDirectory($folderPath, 0755, true); // Create the folder if it doesn't exist
+            }
+
+            $path = $request->file('student_image')->store('student_image', 'public');
+            $student->profile_image = $path;
+        }
+
+        $student->save();
+
+        return redirect()->route('viewStudent')->with('success', 'Student successfully added!');
+    }
+
+    // Update student
+    public function updateStudent(Request $request, $id)
+    {
+        $validatedData = $request->validate([
+            'student_firstname' => 'required|string|max:255',
+            'student_lastname' => 'required|string|max:255',
+            'student_class_details' => 'required|string',
+            'student_identication' => 'required|string',
+            'student_image' => 'nullable|image|max:2048',
+            'gender' => 'required|string',
+        ]);
+
+        $student = Student::findOrFail($id);
+
+        // Extract class details
+        $classDetails = explode(',', $request->input('student_class_details'));
+        if (count($classDetails) === 3) {
+            $student->class_id = $classDetails[0];
+            $student->class_name = $classDetails[1];
+            $student->class_arm = $classDetails[2];
+        } else {
+            return back()->withErrors(['student_class_details' => 'Invalid class selection.']);
+        }
+
+        // Update student details
+        $student->firstname = $validatedData['student_firstname'];
+        $student->lastname = $validatedData['student_lastname'];
+        $student->student_identication = $validatedData['student_identication'];
+        $student->gender = $validatedData['gender'];
+        
+
+        // Handle file upload
+        if ($request->hasFile('student_image')) {
+            $folderPath = storage_path('app/public/student_image');
+            if (!File::exists($folderPath)) {
+                File::makeDirectory($folderPath, 0755, true); // Create the folder if it doesn't exist
+            }
+
+            if ($student->profile_image && Storage::disk('public')->exists($student->profile_image)) {
+                Storage::disk('public')->delete($student->profile_image);
+            }
+
+            $path = $request->file('student_image')->store('student_image', 'public');
+            $student->profile_image = $path;
+        }
+
+        $student->save();
+
+        return redirect()->route('viewStudent')->with('success', 'Student details updated successfully.');
+    }
 
 
 }

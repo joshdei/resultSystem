@@ -60,6 +60,16 @@
                                 </div>
                             </div>
                         
+                            <div class="row mb-3">
+                                <label for="student_identication" class="col-sm-2 col-form-label">Student Identication</label>
+                                <div class="col-sm-10">
+                                    <input name="student_identication" id="student_identication" 
+                                           placeholder="Student Identication" 
+                                           value="{{ $student->student_identication }}" 
+                                           required type="text" class="form-control">
+                                </div>
+                            </div>
+                        
                             <!-- Gender Selection -->
                             <div class="row mb-3">
                                 <label for="gender" class="col-sm-2 col-form-label">Gender</label>

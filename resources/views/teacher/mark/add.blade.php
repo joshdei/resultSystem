@@ -1,4 +1,6 @@
-@include('header') @include('topheader') @include('sidebar')
+@include('header')
+@include('topheader')
+@include('sidebar')
 
 <main id="main" class="main">
     <div class="pagetitle">
@@ -19,113 +21,45 @@
                     <div class="card-body">
                         <h5 class="card-title">Horizontal Form</h5>
 
-                        <form class="row g-3">
+                        <form class="row g-3" method="POST" action="{{ route('marks.store') }}">
+                            @csrf
                             <!-- Student Name -->
                             <div class="col-md-4">
-                                <div class="col-md-12">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="floatingCity" placeholder="Student Name" value="{{ $students->first()->name ?? '' }}" />
-                                        <label for="floatingCity">Student Name</label>
-                                    </div>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="studentName" name="student_name" placeholder="Student Name" value="{{ $students->first()->name ?? '' }}" />
+                                    <label for="studentName">Student Name</label>
                                 </div>
                             </div>
-                        
+
                             <!-- Session -->
                             <div class="col-md-4">
                                 <div class="form-floating mb-3">
-                                    <select class="form-select" id="floatingSelect" aria-label="State">
+                                    <select class="form-select" id="session" name="session" aria-label="State">
                                         <option selected>SESSION</option>
                                         @foreach($getSession as $session)
-                                            <option value="{{ $session->id }}">{{ $session->session_name }}</option>
+                                            <option value="{{ $session->id }}">{{ $session->session }}</option>
                                         @endforeach
                                     </select>
+                                    <label for="session">Session</label>
                                 </div>
                             </div>
-                        
-                            <!-- Student ID -->
-                            <div class="col-md-4">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" id="floatingZip" placeholder="ID" value="{{ $students->first()->id ?? '' }}" />
-                                    <label for="floatingZip">ID</label>
-                                </div>
-                            </div>
-                        
-                            <!-- Student Class -->
-                            <div class="col-md-4">
-                                <div class="col-md-12">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="floatingCity" placeholder="Class" value="{{ $getClass->first()->class_name ?? '' }}" />
-                                        <label for="floatingCity">Student Class</label>
-                                    </div>
-                                </div>
-                            </div>
-                        
-                            <!-- Gender -->
-                            <div class="col-md-4">
-                                <div class="form-floating mb-3">
-                                    <select class="form-select" id="floatingSelect" aria-label="Sex">
-                                        <option selected>Sex</option>
-                                        <option value="1" {{ $students->first()->gender == 'Male' ? 'selected' : '' }}>MALE</option>
-                                        <option value="2" {{ $students->first()->gender == 'Female' ? 'selected' : '' }}>FEMALE</option>
-                                    </select>
-                                </div>
-                            </div>
-                        
-                            <!-- Term -->
-                            <div class="col-md-4">
-                                <div class="form-floating mb-3">
-                                    <select class="form-select" id="floatingSelect" aria-label="Term">
-                                        <option selected>TERM</option>
-                                        <option value="1">1st Term</option>
-                                        <option value="2">2nd Term</option>
-                                        <option value="3">3rd Term</option>
-                                    </select>
-                                </div>
-                            </div>
-                        
-                            <!-- Class Size -->
-                            <div class="col-md-4">
-                                <div class="col-md-12">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="floatingCity" placeholder="Class Size" value="{{ $getClass->first()->class_size ?? '' }}" />
-                                        <label for="floatingCity">Class size</label>
-                                    </div>
-                                </div>
-                            </div>
-                        
-                            <!-- Attendance -->
-                            <div class="col-md-4">
-                                <div class="col-md-12">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="floatingCity" placeholder="Attendance" />
-                                        <label for="floatingCity">ATTENDANCE</label>
-                                    </div>
-                                </div>
-                            </div>
-                        
-                            <!-- Days School Opened -->
-                            <div class="col-md-4">
-                                <div class="col-md-12">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="floatingCity" placeholder="Days School Opened" />
-                                        <label for="floatingCity">DAYS SCHOOL OPENED</label>
-                                    </div>
-                                </div>
-                            </div>
-                        
+
+                            <!-- Other fields like Student ID, Class, Gender, Term, etc. -->
+                            <!-- ... -->
+
                             <!-- Subject Table -->
-                            <div class="card">
+                            <div class="card mt-4">
                                 <div class="card-body">
                                     <h5 class="card-title">Subject Table</h5>
                                     <table class="table">
                                         <thead>
                                             <tr>
-                                                <th scope="col">#</th>
-                                                <th scope="col">S/N</th>
-                                                <th scope="col">SUBJECT</th>
-                                                <th scope="col">1ST TEST</th>
-                                                <th scope="col">2ND TEST</th>
-                                                <th scope="col">EXAM</th>
+                                                <th>#</th>
+                                                <th>S/N</th>
+                                                <th>SUBJECT</th>
+                                                <th>1ST TEST</th>
+                                                <th>2ND TEST</th>
+                                                <th>EXAM</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -143,9 +77,9 @@
                                     </table>
                                 </div>
                             </div>
-                        
+
                             <!-- Student Behaviour Report -->
-                            <div class="card">
+                            <div class="card mt-4">
                                 <div class="card-body">
                                     <h5 class="card-title">Student Behaviour Report</h5>
                                     <div class="row">
@@ -164,53 +98,27 @@
                                                 <tbody>
                                                     <tr>
                                                         <td>CLASS PARTICIPATION</td>
-                                                        <td><input type="checkbox" name="class-participation" value="5"></td>
-                                                        <td><input type="checkbox" name="class-participation" value="4"></td>
-                                                        <td><input type="checkbox" name="class-participation" value="3"></td>
-                                                        <td><input type="checkbox" name="class-participation" value="2"></td>
-                                                        <td><input type="checkbox" name="class-participation" value="1"></td>
+                                                        @for($i = 5; $i >= 1; $i--)
+                                                            <td><input type="radio" name="class_participation" value="{{ $i }}"></td>
+                                                        @endfor
                                                     </tr>
                                                     <!-- Add other behaviour rows here -->
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <div class="col-md-6">
-                                            <table class="table table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th>BEHAVIOUR</th>
-                                                        <th>5</th>
-                                                        <th>4</th>
-                                                        <th>3</th>
-                                                        <th>2</th>
-                                                        <th>1</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>ASSIGNMENT</td>
-                                                        <td><input type="checkbox" name="assignment" value="5"></td>
-                                                        <td><input type="checkbox" name="assignment" value="4"></td>
-                                                        <td><input type="checkbox" name="assignment" value="3"></td>
-                                                        <td><input type="checkbox" name="assignment" value="2"></td>
-                                                        <td><input type="checkbox" name="assignment" value="1"></td>
-                                                    </tr>
-                                                    <!-- Add other behaviour rows here -->
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                        <!-- Add second table -->
                                     </div>
-                        
+
                                     <!-- Class Teacher's Remark -->
                                     <div class="row mt-3">
                                         <div class="col-md-12">
                                             <div class="form-floating">
-                                                <textarea class="form-control" placeholder="Leave a remark here" id="floatingRemark" style="height: 100px"></textarea>
-                                                <label for="floatingRemark">Class Teacher's Remark</label>
+                                                <textarea class="form-control" name="remark" id="classRemark" placeholder="Leave a remark here" style="height: 100px"></textarea>
+                                                <label for="classRemark">Class Teacher's Remark</label>
                                             </div>
                                         </div>
                                     </div>
-                        
+
                                     <!-- Submit Button -->
                                     <div class="row mt-3">
                                         <div class="col-md-12">
@@ -220,7 +128,7 @@
                                 </div>
                             </div>
                         </form>
-                        
+
                     </div>
                 </div>
             </div>

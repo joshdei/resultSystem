@@ -11,6 +11,8 @@ use App\Models\Classes;
 use App\Models\AssignSession;
 use App\Models\AssignResumption;
 
+use App\Models\Term;
+use App\Models\SchoolOpening;
 use Illuminate\Support\Facades\Hash;
 use App\Models\HeadTeacherClass;
 use Illuminate\Support\Facades\Auth;
@@ -141,6 +143,8 @@ class AssignCOntroller extends Controller
             ->back()
             ->with('success', 'Teacher assignment deleted successfully.');
     }
+    
+    
 
     public function addHeadclassTeacher(Request $request)
     {
@@ -183,4 +187,69 @@ class AssignCOntroller extends Controller
         $upload->save();
         return redirect()->route('assign_resumption_date');
     }
+
+    public function assign_term(){
+        $userId = Auth::user()->id;
+        $term = Term::where('owner_id', $userId)->get();
+        return view('admin.assign.assign_term',compact('term'));
+    }
+ 
+    public function opening_of_school_date(){
+        $userId = Auth::user()->id;
+        $SchoolOpening = SchoolOpening::where('owner_id', $userId)->get();
+        return view('admin.assign.opening_of_school_date',compact('SchoolOpening'));
+    }
+
+    public function Uploadterm(Request $request)
+    {
+        $upload = new Term();
+        $upload->owner_id = Auth::user()->id;
+        $upload->term = $request->term;
+        $upload->save();
+        return redirect()->route('assign_term');
+    }
+
+    public function uploadSchoolOpen(Request $request)
+    {
+        $upload = new SchoolOpening();
+        $upload->owner_id = Auth::user()->id;
+        $upload->number = $request->number;
+        $upload->save();
+        return redirect()->route('opening_of_school_date');
+    }
+
+    public function deleteSchoolOpen($id)
+    {
+        $assignment = SchoolOpening::find($id);
+
+        if (!$assignment) {
+            return redirect()
+                ->back()
+                ->with('error', 'Term not found.');
+        }
+
+        $assignment->delete();
+        return redirect()
+            ->back()
+            ->with('success', 'Term deleted successfully.');
+    }
+
+
+    public function deleteterm($id)
+    {
+        $assignment = Term::find($id);
+
+        if (!$assignment) {
+            return redirect()
+                ->back()
+                ->with('error', 'Term not found.');
+        }
+
+        $assignment->delete();
+        return redirect()
+            ->back()
+            ->with('success', 'Term deleted successfully.');
+    }
+
+
 }

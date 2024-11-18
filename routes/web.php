@@ -12,6 +12,7 @@ use App\Http\Controllers\{
     StudentController,
     StudentMarkController,
     AssignCOntroller,
+    StudentResult,
 };
 
 // Public Routes
@@ -80,7 +81,13 @@ Route::middleware([
         Route::post('addclassTeacher', [AssignCOntroller::class, 'addclassTeacher'])->name('addclassTeacher');
         Route::post('addclassHeadTeacher', [AssignCOntroller::class, 'addHeadclassTeacher'])->name('addclassHeadTeacher');
         
-
+        
+        Route::delete('/delete/term/{id}', [AssignCOntroller::class, 'deleteterm'])->name('delete.term');
+        Route::delete('/delete/school/opening/{id}', [AssignCOntroller::class, 'deleteSchoolOpen'])->name('delete.schoolopening');
+        Route::get('assign_term', [AssignCOntroller::class, 'assign_term'])->name('assign_term');
+        Route::get('opening_of_school_date', [AssignCOntroller::class, 'opening_of_school_date'])->name('opening_of_school_date');
+        Route::post('Uploadterm', [AssignCOntroller::class, 'Uploadterm'])->name('Uploadterm');
+        Route::post('uploadSchoolOpen', [AssignCOntroller::class, 'uploadSchoolOpen'])->name('uploadSchoolOpen');
         Route::post('uploadresumption', [AssignCOntroller::class, 'uploadresumption'])->name('uploadresumption');
         Route::post('uploadsession', [AssignCOntroller::class, 'uploadsession'])->name('uploadsession');
         Route::get('assign_session', [AssignCOntroller::class, 'assign_session'])->name('assign_session');
@@ -99,6 +106,7 @@ Route::middleware([
         Route::put('/updateStudent/{id}', [StudentController::class, 'updateStudent'])->name('updateStudent');
 
         // Marks Management
+        Route::post('/marks', [MarkController::class, 'store'])->name('marks.store');
         Route::get('/addMarks', [MarksController::class, 'addMarks'])->name('addMarks');
         Route::get('/viewStudentMarks', [MarksController::class, 'viewStudentMarks'])->name('viewStudentMarks');
         Route::post('/uploadStudentMarks', [MarksController::class, 'uploadStudentMarks'])->name('uploadStudentMarks');
@@ -109,7 +117,12 @@ Route::middleware([
         Route::delete('/delete-student-mark/{id}', [StudentMarkController::class, 'deleteStudentMark'])->name('deleteStudentmark');
 
         // Generic Marks Actions
+        
+        Route::post('/submit-marks', [MarksController::class, 'submitMarks'])->name('submitMarks');
+        Route::get('/addStudentmarks/{id}', [MarksController::class, 'addStudentmarks'])->name('addStudentmarks');
         Route::get('/editMark/{id}', [MarksController::class, 'edit'])->name('editMark');
         Route::delete('/deleteMark/{id}', [MarksController::class, 'destroy'])->name('deleteMark');
+        Route::get('/singleStudentResult/{id}', [StudentResult::class, 'singleStudentResult'])->name('singleStudentResult');
+        
     });
 });
