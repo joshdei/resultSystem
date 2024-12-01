@@ -9,59 +9,33 @@ class StudentResult extends Controller
 {
     public function singleStudentResult($id)
     {
-        $student = Student::find($id);
-        if ($student) {
-            $studentClassId = $student->class_id;
-            $studentsInClass = Student::where('class_id', $studentClassId)->get();
-            $class = Classes::find($studentClassId);
+        $check_student = Student::where('id',$id)->first();
+        if ($check_student) {
+            $student_info = Studentmarks::where('student_id',$check_student->id)->first();
+
+            $student_Class_Id = $student_info->class_id;
+            $subject_count = Subject::where('subject_class_id', $student_Class_Id)->count();
+            $class = Classes::where('id',$student_Class_Id)->first();
+
             $owner_id = $class ? $class->owner_id : null;
             $school_information = $owner_id ? School::where('owner_id', $owner_id)->get() : collect();
             $resumptionDate = $owner_id ? AssignResumption::where('owner_id', $owner_id)->value('date') : 'Not assigned';
             $session = $owner_id ? AssignSession::where('owner_id', $owner_id)->value('session') : 'Not assigned';
             $className = $class ? $class->class_name : 'Unknown';
             $classSize = $class ? $class->class_size : 'Unknown';
-            $classArm = $student->class_arm ?? ($student->class->class_arm ?? 'Unknown');
+            $classArm = $check_student->class_arm ?? ($check_student->class->class_arm ?? 'Unknown');
             $term = $owner_id ? Term::where('owner_id', $owner_id)->value('term') : 'Not assigned';
             $daysSchoolOpened = $owner_id ? SchoolOpening::where('owner_id', $owner_id)->value('number') : 'Not assigned';
-            $studentMark = Studentmarks::where('student_id', $student->id)->first();
+
+
+            $studentMark = Studentmarks::where('student_id', $id)->first();
             $attendance = $studentMark ? $studentMark->attendance : 'Not recorded';
-            $totalStudentsInClass = $studentsInClass->count();
-            $classAverages = [];
-            foreach ($studentsInClass as $classmate) {
-                $classmateMarks = Studentmarks::where('student_id', $classmate->id)->first();
-                $classmateMarks = Studentmarks::where('student_id', $classmate->id)->first();
-                if ($classmateMarks) {
-                    $class_teacher = $classmateMarks->class_id;
-                    $teacher = AssignClassTeacher::where('class_id', $class_teacher)->first();
-                    if ($teacher) {
-                        $teacher_name = $teacher->teacher_fullname;
-                    } else {
-                        $teacher_name = 'No teacher assigned';
-                    }
-                } else {
-                    $teacher_name = 'No marks available';
-                }
-                if ($classmateMarks) {
-                    $marks = json_decode($classmateMarks->marks, true);
-                    $totalMarks = array_sum(array_column($marks, 'score'));
-                    $subjectCount = count($marks);
-                    $classAverages[$classmate->id] = $subjectCount ? $totalMarks / $subjectCount : 0;
-                } else {
-                    $classAverages[$classmate->id] = 0;
-                }
-            }
-            $head_teacher = AssignHeadClassTeacher::where('class_id', $class_teacher)->first();
-            if ($head_teacher) {
-                $headteacher_name = $head_teacher->headteacher_fullname;
-            } else {
-                $headteacher_name = 'No head teacher assigned';
-            }
-            arsort($classAverages);
-            $position = array_search($student->id, array_keys($classAverages)) + 1;
-            arsort($classAverages);
-            $position = array_search($student->id, array_keys($classAverages)) + 1;
-            $highestAverage = max($classAverages);
-            $lowestAverage = min($classAverages);
+            $get_teacher_name = AssignClassTeacher::where('class_id', $student_Class_Id)->first();
+            $teacher_name = $get_teacher_name->teacher_fullname;
+            $head_teacher = AssignHeadClassTeacher::where('class_id', $student_Class_Id)->first();
+            $headteacher_name = $head_teacher->headteacher_fullname;
+
+            $marks = $studentMark ? json_decode($studentMark->marks, true) : null;
             $subjectScores = [];
             if ($marks) {
                 foreach ($marks as $subjectId => $markDetails) {
@@ -72,11 +46,7 @@ class StudentResult extends Controller
                     }
                 }
             }
-            $totalScores = array_sum($subjectScores);
-            $averageScore = $totalScores ? $totalScores / count($subjectScores) : 0;
-            arsort($subjectScores);
-            $subjectPosition = array_search($student->id, array_keys($subjectScores)) + 1;
-            $marks = $studentMark ? json_decode($studentMark->marks, true) : null;
+       
             $behaviorAttributes = $studentMark ? $studentMark->only(['class_participation', 'school_attendance', 'concentration', 'attitude_to_property', 'assignment', 'cleanliness', 'punctuality', 'general_conduct']) : [];
             $classRemark = $studentMark->class_remark ?? 'No remark provided.';
             $headRemark = $studentMark->head_remark ?? 'No remark provided.';
@@ -89,18 +59,16 @@ class StudentResult extends Controller
                     $subjectNames[$subjectId] = $subject ? $subject->subject_name : 'Unknown Subject';
                 }
             }
-
+            $classRemark = $studentMark->class_remark ?? 'No remark provided.';
+            $headRemark = $studentMark->head_remark ?? 'No remark provided.';
             return view(
                 'teacher.student.singleresult',
                 compact(
                     'marks',
+                    'classRemark',
+                    'headRemark',
                     'school_information',
                     'subjectNames',
-                    'student',
-                    'totalStudentsInClass',
-                    'position',
-                    'highestAverage',
-                    'lowestAverage',
                     'behaviorAttributes',
                     'classRemark',
                     'headRemark',
@@ -109,15 +77,14 @@ class StudentResult extends Controller
                     'className',
                     'classArm',
                     'classSize',
-                    'averageScore',
-                    'subjectPosition',
+                    'teacher_name',
+                    'headteacher_name',
                     'term',
                     'daysSchoolOpened',
                     'attendance',
-                    'teacher_name',
-                    'headteacher_name',
                     'outstandingFees',
-                    'nextTermFees'
+                    'nextTermFees',
+                    'check_student',
                 )
             );
         } else {

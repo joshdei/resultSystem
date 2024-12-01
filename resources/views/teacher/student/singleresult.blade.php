@@ -60,12 +60,12 @@
         <!-- Student Information -->
         <div class="row my-4 border border-dark p-3">
             <div class="col-md-6">
-                <p><strong>NAME:</strong> <span style="color: black;">{{ strtoupper($student->firstname . ' ' . $student->lastname) }}</span></p>
-                <p><strong>STUDENT ID:</strong> <span style="color: black;">{{ $student->student_identication }}</span></p>
-                <p><strong>SEX:</strong> <span style="color: black;">{{ strtoupper($student->gender) }}</span></p>
-                <p><strong>POSITION:</strong> <span style="color: black;">{{ $position }}{{ $position == 1 ? 'st' : ($position == 2 ? 'nd' : ($position == 3 ? 'rd' : 'th')) }}</span></p>
-                <p><strong>HIGHEST CLASS AVERAGE:</strong> <span style="color: black;">{{ $highestAverage}}</span></p>
-                <p><strong>LOWEST CLASS AVERAGE:</strong> <span style="color: black;">{{ number_format($lowestAverage, 2) }}</span></p>
+                <p><strong>NAME:</strong> <span style="color: black;">{{ strtoupper($check_student->firstname . ' ' . $check_student->lastname) }}</span></p>
+                <p><strong>STUDENT ID:</strong> <span style="color: black;">{{ $check_student->student_identication }}</span></p>
+                <p><strong>SEX:</strong> <span style="color: black;">{{ strtoupper($check_student->gender) }}</span></p>
+                <p><strong>POSITION:</strong> <span style="color: black;"></span></p>
+                <p><strong>HIGHEST CLASS AVERAGE:</strong> <span style="color: black;">#</span></p>
+                <p><strong>LOWEST CLASS AVERAGE:</strong> <span style="color: black;">#</span></p>
             </div>
             
             <div class="col-md-3">
@@ -92,7 +92,6 @@
             $firstTest = $markDetails['first_test'] ?? 0;
             $secondTest = $markDetails['second_test'] ?? 0;
             $exam = $markDetails['exam'] ?? 0;
-    
             $obtainedTotalScore += $firstTest + $secondTest + $exam; // Accumulate scores
         }
     @endphp
@@ -157,7 +156,7 @@
     @endif
     
 
-    
+ 
     <div class="row border border-dark p-3">
         <div class="col-md-6">
             <table class="table table-bordered">

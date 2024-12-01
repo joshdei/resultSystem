@@ -17,6 +17,7 @@ use App\Models\HeadTeacherClass;
 use App\Models\Term;
 use App\Models\SchoolOpening;
 use App\Models\Studentmarks;
+use App\Models\StoreStudentScores;
 use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Support\Facades\Auth;
@@ -275,6 +276,34 @@ class MarksController extends Controller
                 ]
             );
     
+
+             // Step 2: Calculate the total score from the marks
+             $marks = $validated['marks']; // This is an array
+             $totalScore = 0;
+     
+             foreach ($marks as $subjectId => $subjectMarks) {
+                 $firstTest = $subjectMarks['first_test'] ?? 0;
+                 $secondTest = $subjectMarks['second_test'] ?? 0;
+                 $exam = $subjectMarks['exam'] ?? 0;
+     
+                 $totalScore += $firstTest + $secondTest + $exam;
+             }
+     
+             // Step 3: Divide the total score by 2
+             $finalScore = $totalScore;
+     
+             // Step 4: Store the result in the StoreStudentScores table
+             StoreStudentScores::updateOrCreate(
+                 [
+                     'student_id' => $validated['student_id'], // Ensure uniqueness for student
+                     'class_id' => $validated['class_id'],
+                 ],
+                 [
+                     'teacher_id' => Auth::user()->id,
+                     'marks' => $finalScore, // Store the divided score
+                 ]
+             );
+
             // Provide appropriate feedback
             if ($data->wasRecentlyCreated) {
                 return redirect()->back()->with('success', 'Student marks have been successfully submitted.');
