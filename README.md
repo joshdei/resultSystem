@@ -1,66 +1,191 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# School Management System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A comprehensive school management system built with Laravel, featuring role-based access control for administrators and teachers.
 
-## About Laravel
+## 🚀 Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### 🔐 Authentication
+- Secure login with Laravel Sanctum
+- Jetstream authentication with email verification
+- Session management
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 👥 User Roles
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+#### Admin (Role: 1)
+- **School Management**
+  - View and update school information
+  - Upload school data
+  
+- **Staff Management**
+  - Add, edit, and delete head teachers
+  - View all teachers
+  
+- **Class Management**
+  - Create, update, and delete classes
+  - View class list
+  
+- **Subject Management**
+  - Add subjects
+  - Delete subjects
+  - View subject list
 
-## Learning Laravel
+- **Marks Management**
+  - Upload marks for students
+  - View all marks
+  - Delete marks entries
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- **Assignment Management**
+  - Assign class teachers
+  - Assign head teachers
+  - Manage academic sessions
+  - Manage terms
+  - Manage resumption dates
+  - Manage school opening dates
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+#### Teacher (Role: 2)
+- **Student Management**
+  - Add, edit, and delete students
+  - View student list
+  
+- **Marks Management**
+  - Add marks for students
+  - View student marks
+  - Upload student marks
+  - Edit and delete marks
+  - View individual student results
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 👤 Profile Management
+- Update account information
+- Change password
+- View profile
 
-## Laravel Sponsors
+## 🛠️ Technology Stack
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- **Backend Framework**: Laravel (Latest Version)
+- **Authentication**: Laravel Sanctum
+- **Frontend**: Jetstream
+- **Database**: MySQL/PostgreSQL
+- **PHP Version**: ^8.0
 
-### Premium Partners
+## 📋 Prerequisites
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+- PHP >= 8.0
+- Composer
+- MySQL/PostgreSQL
+- Node.js & NPM (for frontend assets)
 
-## Contributing
+## 🔧 Installation
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+1. **Clone the repository**
+```bash
+git clone https://github.com/yourusername/school-management-system.git
+cd school-management-system
+```
 
-## Code of Conduct
+2. **Install dependencies**
+```bash
+composer install
+npm install
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+3. **Environment configuration**
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-## Security Vulnerabilities
+4. **Configure database**
+Edit `.env` file with your database credentials:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=your_database_name
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+5. **Run migrations**
+```bash
+php artisan migrate
+```
 
-## License
+6. **Serve the application**
+```bash
+php artisan serve
+npm run dev
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 📁 Project Structure
+
+### Key Controllers
+- `Backdoor` - Entry point controller
+- `Profile` - User profile management
+- `SchoolController` - School information management
+- `HeadTeacherController` - Head teacher management
+- `ClassController` - Class management
+- `SubjectController` - Subject management
+- `MarksController` - Marks management
+- `StudentController` - Student management
+- `StudentMarkController` - Student marks management
+- `AssignController` - Assignment management
+- `StudentResult` - Student result viewing
+
+### Middleware
+- `auth:sanctum` - Authentication middleware
+- `verified` - Email verification middleware
+- `role:1` - Admin role middleware
+- `role:2` - Teacher role middleware
+
+## 🔒 Security Features
+
+- Role-based access control (RBAC)
+- Email verification
+- Session management
+- Sanctum token authentication
+- Input validation and sanitization
+
+## 🗺️ API Routes
+
+### Public Routes
+- `/` - Landing page
+
+### Authenticated Routes
+- `/profile` - User profile
+- `/update_account` - Update profile
+- `/changePassword` - Change password
+
+### Admin Routes (Role: 1)
+- School management endpoints
+- Staff management endpoints
+- Class management endpoints
+- Subject management endpoints
+- Marks management endpoints
+- Assignment management endpoints
+
+### Teacher Routes (Role: 2)
+- Student management endpoints
+- Marks management endpoints
+- Result viewing endpoints
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## 👨‍💻 Author
+
+https://github.com/joshdei
+
+## 🙏 Acknowledgments
+
+- Laravel Community
+- Jetstream Team
+- All contributors
